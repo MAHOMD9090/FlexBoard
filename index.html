@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>عرض البيانات</title>
+  <style>
+    /* تصميم عام للصفحة */
+    body {
+      font-family: 'Tajawal', sans-serif; /* خط عربي مميز */
+      direction: rtl; /* اتجاه النص من اليمين لليسار */
+      margin: 0;
+      padding: 0;
+      background-color: #f8f8f8; /* لون خلفية لطيف */
+      color: #333; /* لون نص داكن */
+    }
+
+    /* تصميم الشريط العلوي */
+    .header {
+      background-color: #3498db; /* لون أزرق جذاب */
+      color: white;
+      text-align: center;
+      padding: 20px 0;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* ظل خفيف */
+    }
+
+    .container {
+      max-width: 900px; /* عرض أكبر للحاويات */
+      margin: 20px auto;
+      padding: 20px;
+    }
+
+    /* تصميم حاوية البطاقات */
+    .card-container {
+      display: flex;
+      flex-wrap: wrap; /* السماح للبطاقات بالانتقال إلى السطر التالي */
+      justify-content: space-around; /* توزيع البطاقات بالتساوي */
+    }
+
+    /* تصميم البطاقة */
+    .card {
+      width: 300px; /* عرض ثابت للبطاقة */
+      margin: 15px;
+      padding: 15px;
+      border-radius: 12px; /* حواف دائرية أكثر */
+      background-color: white; /* لون خلفية البطاقة */
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* ظل أكثر بروزاً */
+      transition: transform 0.3s ease-in-out; /* تأثير تحويل عند التحويم */
+    }
+
+    .card:hover {
+      transform: scale(1.05); /* تكبير طفيف عند التحويم */
+    }
+
+    .card h2 {
+      font-size: 22px; /* حجم خط أكبر للعنوان */
+      margin-bottom: 10px;
+      color: #3498db; /* لون العنوان */
+    }
+
+    .card p {
+      font-size: 16px;
+      line-height: 1.6; /* تباعد الأسطر لتحسين القراءة */
+      margin-bottom: 8px;
+    }
+
+    /* تصميم تذييل الصفحة */
+    .footer {
+      text-align: center;
+      padding: 20px 0;
+      background-color: #333; /* لون خلفية داكن */
+      color: white;
+    }
+    
+    .footer p {
+      margin: 5px 0; /* تباعد بين الأسطر في التذييل */
+    }
+  </style>
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+  <script type="module">
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js';
+    import { getFirestore, collection, getDocs } from 'https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js';
+
+    document.addEventListener('DOMContentLoaded', function() {
+      // إعداد Firebase
+      const firebaseConfig = {
+	  apiKey: "AIzaSyA29-NpduIud5eb2qe0zSbh-z-miKyE6xI",
+	  authDomain: "flexboard-3f8d2.firebaseapp.com",
+	  projectId: "flexboard-3f8d2",
+	  storageBucket: "flexboard-3f8d2.firebasestorage.app",
+	  messagingSenderId: "739705156531",
+	  appId: "1:739705156531:web:234192f036cae290bed1c6",
+	  measurementId: "G-NSZLHNB0CD"
+	};
+
+      // تهيئة Firebase
+      const app = initializeApp(firebaseConfig);
+      const db = getFirestore(app);
+
+      // دالة لعرض بيانات السيارات كبطاقات
+      async function displayCars() {
+        const cardContainer = document.querySelector('.card-container');
+        cardContainer.innerHTML = ''; // مسح أي بطاقات موجودة
+
+        const querySnapshot = await getDocs(collection(db, "test")); // جلب جميع الوثائق من مجموعة "test"
+
+        querySnapshot.forEach((doc) => {
+          const carData = doc.data().card;
+          const card = document.createElement('div');
+          card.className = 'card';
+
+          const nameHeading = document.createElement('h2');
+          nameHeading.textContent = carData.Name; 
+
+          const descriptionPara = document.createElement('p');
+          descriptionPara.textContent = 'الوصف: ' + carData.Description;
+
+          const pricePara = document.createElement('p');
+          pricePara.textContent = 'السعر: ' + carData.Price + ' ريال';
+
+          card.appendChild(nameHeading);
+          card.appendChild(descriptionPara);
+          card.appendChild(pricePara);
+
+          cardContainer.appendChild(card);
+        });
+      }
+
+      displayCars();
+    });
+  </script>
+</head>
+<body>
+
+  <!-- الشريط العلوي -->
+  <div class="header">
+    <h1>البيانات</h1>
+  </div>
+
+  <div class="container">
+    <div class="card-container">
+      <!-- سيتم عرض بيانات السيارات هنا -->
+    </div>
+  </div>
+
+  <!-- تذييل الصفحة -->
+  <div class="footer">
+    <p>للتواصل: <br>
+       رقم الجوال: 05xxxxxxxx <br>
+       البريد الإلكتروني: example@example.com</p>
+  </div>
+</body>
+</html>
